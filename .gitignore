@@ -1,0 +1,5 @@
+.env
+turnserver.conf
+postgres-data/
+roms/
+bios/

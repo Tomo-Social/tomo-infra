@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tomo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-tomo}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  signaling:
+    image: ${TOMO_SIGNALING_IMAGE:?set TOMO_SIGNALING_IMAGE in .env}
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgres://${POSTGRES_USER:-tomo}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-tomo}
+      ROMS_DIR: /srv/tomo/roms
+      BIOS_DIR: /srv/tomo/bios
+      GAME_SERVER_IMAGE: ${TOMO_GAME_SERVER_IMAGE:?set TOMO_GAME_SERVER_IMAGE in .env}
+      GAME_SERVER_SIGNALING_URL: ${GAME_SERVER_SIGNALING_URL:-ws://localhost:8080/signaling}
+      PUBLIC_IP: ${PUBLIC_IP:?set PUBLIC_IP in .env}
+      TURN_URL: ${TURN_URL:-turn:${PUBLIC_IP}:3478?transport=udp}
+      TURN_SHARED_SECRET: ${TURN_SHARED_SECRET:?set TURN_SHARED_SECRET in .env}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${ROMS_HOST_DIR:-./roms}:/srv/tomo/roms
+      - ${BIOS_HOST_DIR:-./bios}:/srv/tomo/bios
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  web:
+    image: ${TOMO_WEB_IMAGE:?set TOMO_WEB_IMAGE in .env}
+    ports:
+      - "5173:5173"
+    depends_on:
+      - signaling
+    restart: unless-stopped
+
+  coturn:
+    image: coturn/coturn:latest
+    network_mode: host
+    volumes:
+      - ./turnserver.conf:/etc/coturn/turnserver.conf:ro
+    command: -c /etc/coturn/turnserver.conf
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
