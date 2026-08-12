@@ -16,6 +16,8 @@ services:
       DATABASE_URL: postgres://${POSTGRES_USER:-tomo}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-tomo}
       ROMS_DIR: /srv/tomo/roms
       BIOS_DIR: /srv/tomo/bios
+      ROMS_HOST_DIR: ${ROMS_HOST_DIR:-./roms}
+      BIOS_HOST_DIR: ${BIOS_HOST_DIR:-./bios}
       GAME_SERVER_IMAGE: ${TOMO_GAME_SERVER_IMAGE:?set TOMO_GAME_SERVER_IMAGE in .env}
       GAME_SERVER_SIGNALING_URL: ${GAME_SERVER_SIGNALING_URL:-ws://localhost:8080/signaling}
       PUBLIC_IP: ${PUBLIC_IP:?set PUBLIC_IP in .env}
