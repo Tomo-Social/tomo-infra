@@ -17,4 +17,8 @@ jobs:
         env:
           POSTGRES_PASSWORD: ci-only-postgres-password
           TURN_SHARED_SECRET: ci-only-turn-secret
+          TOMO_SIGNALING_IMAGE: tomo-signaling:ci
+          TOMO_GAME_SERVER_IMAGE: tomo-game-server:ci
+          TOMO_WEB_IMAGE: tomo-web:ci
+          PUBLIC_IP: 127.0.0.1
         run: docker compose config
