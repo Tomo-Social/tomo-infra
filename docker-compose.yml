@@ -19,10 +19,18 @@ services:
       ROMS_HOST_DIR: ${ROMS_HOST_DIR:-./roms}
       BIOS_HOST_DIR: ${BIOS_HOST_DIR:-./bios}
       GAME_SERVER_IMAGE: ${TOMO_GAME_SERVER_IMAGE:?set TOMO_GAME_SERVER_IMAGE in .env}
+      TOMO_RETRO_STREAM_SERVER_IMAGE: ${TOMO_RETRO_STREAM_SERVER_IMAGE:-}
+      AV_STREAM_SERVER_IMAGE: ${AV_STREAM_SERVER_IMAGE:-tomo-av-stream-server:local}
+      CAMERA_DEVICE_HOST: ${CAMERA_DEVICE_HOST:-}
+      X11_SOCKET_HOST: ${X11_SOCKET_HOST:-}
+      PULSE_SOCKET_HOST: ${PULSE_SOCKET_HOST:-}
+      INPUT_SOCKET_HOST_DIR: ${INPUT_SOCKET_HOST_DIR:-}
       GAME_SERVER_SIGNALING_URL: ${GAME_SERVER_SIGNALING_URL:-ws://localhost:8080/signaling}
       PUBLIC_IP: ${PUBLIC_IP:?set PUBLIC_IP in .env}
       TURN_URL: ${TURN_URL:-turn:${PUBLIC_IP}:3478?transport=udp}
       TURN_SHARED_SECRET: ${TURN_SHARED_SECRET:?set TURN_SHARED_SECRET in .env}
+      TOMO_RETRO_API_KEY: ${TOMO_RETRO_API_KEY:-}
+      TOMO_RETRO_API_KEYS: ${TOMO_RETRO_API_KEYS:-}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${ROMS_HOST_DIR:-./roms}:/srv/tomo/roms

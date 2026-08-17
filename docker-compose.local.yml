@@ -1,0 +1,8 @@
+services:
+  signaling:
+    environment:
+      # A game container on Docker Desktop reaches the published local port this way.
+      GAME_SERVER_SIGNALING_URL: ws://host.docker.internal:8080/signaling
+      # TURN is not needed for a same-machine preview and would require a public IP.
+      TURN_URL: ""
+      TURN_SHARED_SECRET: ""
